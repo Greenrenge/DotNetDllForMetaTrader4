@@ -1,0 +1,3 @@
+LIBRARY "CppStdcallInerfaceWrapper"
+EXPORTS
+   Hello
