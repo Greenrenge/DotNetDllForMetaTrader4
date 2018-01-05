@@ -9,7 +9,7 @@ namespace DebugEntry
     {
         //https://stackoverflow.com/questions/9003072/unable-to-load-dll-module-could-not-be-found-hresult-0x8007007e
         //https://stackoverflow.com/questions/33743493/why-visual-studio-2015-cant-run-exe-file-ucrtbased-dll
-        //https://msdn.microsoft.com/en-us/library/kbaht4dh.aspx //mix debugging mode in c++ , for c# looking for enable native code debugging
+        //https://msdn.microsoft.com/en-us/library/kbaht4dh.aspx //mix debugging mode in c++ , for c# looking for enable native code debugging option
 
         //https://stackoverflow.com/questions/32991274/return-string-from-c-dll-export-function-called-from-c-sharp
         [DllImport("CppStdcallInerfaceWrapper.dll",
@@ -33,6 +33,9 @@ namespace DebugEntry
             //https://stackoverflow.com/questions/3563870/difference-between-managed-and-unmanaged
             //https://stackoverflow.com/questions/6514454/how-to-send-a-string-by-reference-to-an-unmanaged-c-library-that-modifies-that-s
             System.Console.ReadLine();
+            Marshal.FreeHGlobal(sent);//free the copied unmanaged memory
+            //Marshal.FreeHGlobal(intPtr);
+
         }
     }
 }
