@@ -15,11 +15,23 @@ namespace DebugEntry
         [DllImport("CppStdcallInerfaceWrapper.dll",
               CharSet = CharSet.Ansi, CallingConvention =
                  CallingConvention.StdCall)]
-        public static extern string Hello(string name);
+        public static extern IntPtr Hello(IntPtr name);
 
         static void Main(string[] args)
         {
-            System.Console.WriteLine(Hello("MyName"));//test c++ export function module
+            //ไม่สามารส่ง string ของ .net ที่เป็น managed code's memory (heap) ไปให้ unmanaged code ของ C++ ได้
+            //ต้องอาศัย IntPtr (pointer) เข้ามา copy string to unmanaged memory ก่อน แล้วค่อยส่งเข้าไป (C++ รับเป็น char*)
+            string passedString = "MyName";
+            IntPtr sent = Marshal.StringToHGlobalAnsi(passedString);
+
+            // C++ return char* 
+            // .Net ต้องรับด้วย IntPtr คือรับเป็น pointer แล้วมา convert เป็น string ใน .net อีกที
+            IntPtr intPtr = Hello(sent);
+            string returnedString = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(intPtr);
+            System.Console.WriteLine(returnedString);
+            //System.Console.WriteLine(Hello("MyName"));//test c++ export function module , error = The pointer passed in as a String must not be in the bottom 64K of the process's address space.
+            //https://stackoverflow.com/questions/3563870/difference-between-managed-and-unmanaged
+            //https://stackoverflow.com/questions/6514454/how-to-send-a-string-by-reference-to-an-unmanaged-c-library-that-modifies-that-s
             System.Console.ReadLine();
         }
     }

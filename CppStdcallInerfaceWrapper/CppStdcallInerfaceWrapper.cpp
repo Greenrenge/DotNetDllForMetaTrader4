@@ -20,13 +20,13 @@ using namespace CSharpAssembly;
 __declspec(dllexport) char* __stdcall Hello(char* name)
 {
 	int i = 0;
-	while (*name != '\0')
+	while (*name != '\0')//string from c# end with \0
 	{
 		i++;
 		name++;
 	}
 	array<unsigned char>^ nameManArr =
-		gcnew array<unsigned char>(i);
+		gcnew array<unsigned char>(i); //byte[] in c#
 	name -= i;
 	i = 0;
 	while (*name != '\0')
@@ -44,4 +44,9 @@ __declspec(dllexport) char* __stdcall Hello(char* name)
 	}
 	char8UnmanArr[char8ManArr->Length] = '\0';
 	return char8UnmanArr;
+	//error = The pointer passed in as a String must not be in the bottom 64K of the process's address space.
+	//https://stackoverflow.com/questions/3563870/difference-between-managed-and-unmanaged
+	//https://stackoverflow.com/questions/6514454/how-to-send-a-string-by-reference-to-an-unmanaged-c-library-that-modifies-that-s
+	//https://www.codeproject.com/Articles/1189085/Passing-strings-between-managed-and-unmanaged-code
+	//return (char*)'!';
 }
